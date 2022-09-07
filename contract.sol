@@ -1,49 +1,29 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-// @title Voting with delegation
-contract Vote {
-    // This declares a new complex type which will 
-    // be used for variables later.
-    // It will represent a single vote.
-    struct Voter {
-        uint weight;      // weight is accumulated by delegation
-        bool voted;       // if true, that person already voted
-        address delegate; // person delegated to
-        uint vote;        // index of the voted proposal
+contract List {
+
+    struct Profile {
+        string FirstName;
+        string LastName;
+        uint256 Age;
+        address Address;
     }
 
-    // This is a type for a single proposal.
-    struct Proposal {
-        bytes32 name;   // short name (up to 32 bytes)
-        uint voteCount; // number of accumulkated votes
+    Profile[] public Output;
+
+    uint public Amount=0;
+    bool public Status;
+
+    function AddressHash(string memory _FirstName, string memory _LastName, uint256 _DateOfBirth) external pure returns (bytes32 ) {
+        return keccak256(abi.encode(_FirstName, _LastName, _DateOfBirth)); //keccak256 is for hashing the data
     }
     
-    address public chairperson;
-
-    // This declares a state variable that 
-    // stores a 'voter' struct for each possible address.
-    mapping (address => Voter) public voters;
-
-    // A dynamically-sized array of 'Proposal' structs.
-    Proposal[] public proposals;
-
-    /// Create a new ballot to choose one of 'proposalNames'.
-    constructor(bytes32[] memory proposalNames) {
-        chairperson = msg.sender;
-        voters[chairperson].weight = 1;
-
-        // For each of the provided proposal names,
-        // create a new proposal object and add it 
-        // to the end of the array.
-        for (uint i = 0; i < proposalNames.length; i++) {
-            proposals.push(Proposal({
-                name: proposalNames[i],
-                voteCount: 0
-            }));
-        }
+    function Input(string memory _FirstName, string memory _LastName, uint256 _Age, address _Address) public {
+        Output.push(Profile(_FirstName, _LastName, _Age, _Address));
+        Amount++;
+        Status=true;
     }
 
-    .....
 }
 
